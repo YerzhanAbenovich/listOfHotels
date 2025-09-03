@@ -89,6 +89,15 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ae3-cf-buZ">
+                                <rect key="frame" x="76" y="483" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <connections>
+                                    <action selector="openMap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gUH-dx-GFC"/>
+                                    <segue destination="mii-po-pA6" kind="show" id="6Jl-Bq-ap9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -96,6 +105,7 @@
                     <connections>
                         <outlet property="addressHotel" destination="Z7S-C3-YU6" id="kWy-lP-SlB"/>
                         <outlet property="imageHotel" destination="462-rJ-gWj" id="Juh-6r-UT8"/>
+                        <outlet property="mapButton" destination="Pcp-Mz-zCQ" id="qBl-uE-Vxb"/>
                         <outlet property="nameHotel" destination="ME2-RA-X4T" id="rSu-g2-tZX"/>
                     </connections>
                 </viewController>
@@ -103,16 +113,16 @@
             </objects>
             <point key="canvasLocation" x="1041.9847328244275" y="35.91549295774648"/>
         </scene>
-        <!--View Controller-->
+        <!--Map View Controller-->
         <scene sceneID="nub-Sx-eat">
             <objects>
-                <viewController id="mii-po-pA6" sceneMemberID="viewController">
+                <viewController id="mii-po-pA6" customClass="MapViewController" customModule="ListOfHotels" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="euI-ya-CZk">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rto-Qj-Tem">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
                         </subviews>
@@ -120,16 +130,21 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Rto-Qj-Tem" firstAttribute="top" secondItem="Dy1-sh-WSt" secondAttribute="top" id="01g-1B-okT"/>
+                            <constraint firstItem="Rto-Qj-Tem" firstAttribute="top" secondItem="Dy1-sh-WSt" secondAttribute="top" id="8tn-Dt-xfT"/>
                             <constraint firstItem="Dy1-sh-WSt" firstAttribute="trailing" secondItem="Rto-Qj-Tem" secondAttribute="trailing" id="Cp2-gQ-5Vf"/>
                             <constraint firstItem="Dy1-sh-WSt" firstAttribute="bottom" secondItem="Rto-Qj-Tem" secondAttribute="bottom" id="d6B-TS-Dkc"/>
                             <constraint firstItem="Rto-Qj-Tem" firstAttribute="leading" secondItem="Dy1-sh-WSt" secondAttribute="leading" id="jsj-mj-Dpg"/>
                             <constraint firstItem="Dy1-sh-WSt" firstAttribute="bottom" secondItem="Rto-Qj-Tem" secondAttribute="bottom" id="vhS-Hg-lAY"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="tki-ST-F5m"/>
+                    <connections>
+                        <outlet property="mapview" destination="Rto-Qj-Tem" id="HDa-cu-b0M"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="13c-Vu-bMW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1972" y="36"/>
+            <point key="canvasLocation" x="1971.7557251908397" y="35.91549295774648"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="abD-Il-n0x">

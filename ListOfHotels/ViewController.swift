@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import MapKit
 
 class ViewController: UIViewController {
     
     @IBOutlet weak var imageHotel: UIImageView!
     @IBOutlet weak var nameHotel: UILabel!
     @IBOutlet weak var addressHotel: UILabel!
+    
+    @IBOutlet weak var mapButton: MKMapView!
     
     var hotel = Hotel()
     
@@ -22,8 +25,17 @@ class ViewController: UIViewController {
         imageHotel.image = UIImage(named: hotel.image)
         nameHotel.text = hotel.name
         addressHotel.text = hotel.address
+        
+        
     }
+    
 
+    @IBAction func openMap(_ sender: Any) {
+    }
+    
+    
+    
+    
 
 }
 
