@@ -16,10 +16,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIGestureR
     var userLocation = CLLocation()
     var followMe = false
     
-    var hotel = Hotel()
+    var hotel: Hotel? //Принимаем отель
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         // Запрашиваем разрешение на использование местоположения пользователя
         locationManager.requestWhenInUseAuthorization()
@@ -40,6 +42,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIGestureR
         mapview.addGestureRecognizer(mapDragRecognizer)
         
         mapview.delegate = self
+        mapview.showsUserLocation = true
+        
+        let anotation = MKPointAnnotation()
+        
+        // Задаем коортинаты метке
+        anotation.coordinate = hotel.hotelCoordinate
+        // Задаем название метке
+        anotation.title = hotel.name
+        // Задаем описание метке
+        anotation.subtitle = hotel.address
+        
+        // Добавляем метку на карту
+        mapview.addAnnotation(anotation)
         
     }
     
@@ -76,45 +91,58 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIGestureR
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
-        let anotation = MKPointAnnotation()
+        guard let annotation = view.annotation else { return }
         
-        // Задаем коортинаты метке
-        anotation.coordinate = hotel.coordinate
-        // Задаем название метке
-        anotation.title = hotel.name
-        // Задаем описание метке
-        anotation.subtitle = hotel.address
+        // 1. Начальная точка (пользователь)
+        let sourceLocation = CLLocationCoordinate2D(
+            latitude: userLocation.coordinate.latitude,
+            longitude: userLocation.coordinate.longitude
+        )
         
-        // Добавляем метку на карту
-        mapview.addAnnotation(anotation)
+        // 2. Конечная точка (отель)
+        let destinationLocation = annotation.coordinate
         
+        // 3. Упаковка в Placemark
+        let sourcePlacemark = MKPlacemark(coordinate: sourceLocation)
+        let destinationPlacemark = MKPlacemark(coordinate: destinationLocation)
         
-        // Routing - построение маршрута
-        // 1 Координаты начальной точки А и точки B
-        let sourceLocation = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
-        
-        let destinationLocation = CLLocationCoordinate2D(latitude: (view.annotation?.coordinate.latitude)!, longitude: (view.annotation?.coordinate.longitude)!)
-        
-        // 2 упаковка в Placemark
-        let sourcePlacemark = MKPlacemark(coordinate: sourceLocation, addressDictionary: nil)
-        let destinationPlacemark = MKPlacemark(coordinate: destinationLocation, addressDictionary: nil)
-        
-        // 3 упаковка в MapItem
+        // 4. Упаковка в MapItem
         let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
         let destinationMapItem = MKMapItem(placemark: destinationPlacemark)
         
-        // 4 Запрос на построение маршрута
+        // 5. Запрос на построение маршрута
         let directionRequest = MKDirections.Request()
-        // указываем точку А, то есть нашего пользователя
         directionRequest.source = sourceMapItem
-        // указываем точку B, то есть метку на карте
         directionRequest.destination = destinationMapItem
-        // выбираем на чем будем ехать - на машине
         directionRequest.transportType = .automobile
         
-        // Calculate the direction
+        // 6. Построение маршрута
         let directions = MKDirections(request: directionRequest)
-        
+        directions.calculate { (response, error) in
+            if let error = error {
+                print("Ошибка при построении маршрута: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let response = response, let route = response.routes.first else {
+                print("Маршрут не найден")
+                return
+            }
+            
+            // Убираем старые маршруты (чтобы не дублировались)
+            self.mapview.removeOverlays(self.mapview.overlays)
+            
+            // Добавляем новый маршрут
+            self.mapview.addOverlay(route.polyline, level: .aboveRoads)
+            
+            // Масштабируем карту под весь маршрут
+            self.mapview.setVisibleMapRect(
+                route.polyline.boundingMapRect,
+                edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
+                animated: true
+            )
+        }
+    
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -128,5 +156,4 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIGestureR
         return renderer
     }
     
-
 }

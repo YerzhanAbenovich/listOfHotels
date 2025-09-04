@@ -10,9 +10,10 @@ import CoreLocation
 
 class TableViewController: UITableViewController, CLLocationManagerDelegate {
     
-    var hotelArray = [Hotel(name: "SureStay Plus by Best Western Santa Clara Silicon Valley", address: "859 El Camino Real, Santa Clara, CA 95050", image: "SureStay", coordinate: CLLocationCoordinate2D(latitude: 37.355468, longitude: -121.945257)),
-                      Hotel(name: "AC Hotel San Jose Sunnyvale Cupertino", address: "597 East El Camino Real, Sunnyvale, CA 94087", image: "AC Hotel", coordinate: CLLocationCoordinate2DMake(37.362515, -122.025110)),
-                      Hotel(name: "Ramada by Wyndham Sunnyvale/Silicon Valley", address: "1217 Wildwood Ave, Sunnyvale, CA, 94089", image: "Ramada", coordinate: CLLocationCoordinate2DMake(37.390947, -121.992788))]
+    var hotelArray = [Hotel(name: "SureStay Plus by Best Western Santa Clara Silicon Valley", address: "859 El Camino Real, Santa Clara, CA 95050", image: "SureStay", hotelCoordinate: CLLocationCoordinate2D(latitude: 37.355468, longitude: -121.945257)),
+                      Hotel(name: "AC Hotel San Jose Sunnyvale Cupertino", address: "597 East El Camino Real, Sunnyvale, CA 94087", image: "AC Hotel", hotelCoordinate: CLLocationCoordinate2D(latitude: 37.362515, longitude: -122.025110)),
+                      Hotel(name: "Ramada by Wyndham Sunnyvale/Silicon Valley", address: "1217 Wildwood Ave, Sunnyvale, CA, 94089", image: "Ramada", hotelCoordinate: CLLocationCoordinate2D(latitude: 37.390947, longitude: -121.992788))]
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,9 +60,10 @@ class TableViewController: UITableViewController, CLLocationManagerDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = storyboard?.instantiateViewController(withIdentifier: "DetailsViewController") as! ViewController
+        let vc = storyboard?.instantiateViewController(withIdentifier: "ViewController") as! ViewController
         
         vc.hotel = hotelArray[indexPath.row]
+        
         
         navigationController?.show(vc, sender: self)
     }
